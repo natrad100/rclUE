@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <CoreMinimal.h>
 
 #include "sensor_msgs/msg/image.h"
@@ -23,10 +25,10 @@ public:
 	FROSHeader header;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 height; // original uint32
+	int height; // original uint32
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 width; // original uint32
+	int width; // original uint32
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString encoding;
@@ -35,9 +37,13 @@ public:
 	int32 is_bigendian; // original uint8
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int64 step; // original uint32
+	int step; // original uint32 -- maybe this should be automatically populated
 
-	TArray<uint8> data;	// this would probably not translate across well in Blueprint compliant types..
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FColor> data; // original seq of uint8
+	// TArray<uint8> data;	// this would probably not translate across well in Blueprint compliant types..
+
+	std::vector<uint8_t> buffer;
 
 	void SetFromROS2(const sensor_msgs__msg__Image& in_ros_data)
 	{
@@ -53,10 +59,11 @@ public:
 
 		step = in_ros_data.step;
 
-		for (int i = 0; i < in_ros_data.data.size; i++)
-		{
-			data.Add(in_ros_data.data.data[i]);
-		}
+		// TODO
+		// for (int i = 0; i < in_ros_data.data.size; i++)
+		// {
+		// 	data.Add(in_ros_data.data.data[i]);
+		// }
 
 		
 	}
@@ -83,24 +90,42 @@ public:
 		}
 
 		out_ros_data.is_bigendian = is_bigendian;
-
 		out_ros_data.step = step;
 
-		if (out_ros_data.data.data != nullptr)
-		{
-			free(out_ros_data.data.data);
-		}
-		out_ros_data.data.data = (decltype(out_ros_data.data.data))malloc((data.Num())*sizeof(decltype(*out_ros_data.data.data)));
-		
-		for (int i = 0; i < data.Num(); i++)
-		{
-			out_ros_data.data.data[i] = data[i];
-		}
 
-		out_ros_data.data.size = data.Num();
-		out_ros_data.data.capacity = data.Num();
 
+		// if (out_ros_data.data.size != (step * height)) {
+		// 	if (out_ros_data.data.data != nullptr)
+		// 	{
+		// 		free(out_ros_data.data.data);
+		// 	}
+		// 	out_ros_data.data.data = (decltype(out_ros_data.data.data)) malloc((step * height)*sizeof(decltype(*out_ros_data.data.data)));
 		
+		// 	out_ros_data.data.size = step * height;
+		// 	out_ros_data.data.capacity = step * height;
+		// }
+
+
+		// uint32_t* data_32b = reinterpret_cast<uint32_t*>(out_ros_data.data.data);
+
+
+
+		// for (int i = 0; i < data.Num(); i++)
+		// {
+		// 	int j = data.Num() * 4;
+		// 	// this is broken -- seems to be writing outside of the permitted area
+		// 	// data_32b[i] = data[i].ToPackedRGBA();
+		// 	out_ros_data.data.data[j] = data[i].R;
+		// 	out_ros_data.data.data[j+1] = data[i].G;
+		// 	out_ros_data.data.data[j+2] = data[i].B;
+		// 	out_ros_data.data.data[j+3] = data[i].A;
+		// }
+
+		//https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/Containers/TArray/GetData/2/
+
+		out_ros_data.data.data = (uint8_t*) buffer.data();
+		out_ros_data.data.size = buffer.size();
+		out_ros_data.data.capacity = buffer.size();
 	}
 };
 
@@ -122,6 +147,18 @@ public:
 	void GetMsg(FROSImage& Output) const;
 	
 	virtual void* Get() override;
+
+  	UFUNCTION(BlueprintCallable)
+	void BufferCopy(UPARAM(ref) FROSImage& img, UPARAM(ref) TArray<FColor>& input) {
+		img.buffer.clear();
+
+		for (auto& c : input) {
+			img.buffer.push_back((uint8_t) c.R);
+			img.buffer.push_back((uint8_t)c.G);
+			img.buffer.push_back((uint8_t)c.B);
+			img.buffer.push_back((uint8_t)c.A);
+		}
+	}
 
 private:
 	virtual FString MsgToString() const override;
