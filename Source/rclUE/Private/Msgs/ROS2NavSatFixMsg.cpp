@@ -7,7 +7,6 @@
 
 void UROS2NavSatFixMsg::Init()
 {
-	memset(&nav_sat_fix_msg, 0, sizeof(sensor_msgs__msg__NavSatFix));
 	sensor_msgs__msg__NavSatFix__init(&nav_sat_fix_msg);
 }
 
