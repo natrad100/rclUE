@@ -91,6 +91,8 @@ public:
 
     virtual void Fini() override
     {
+      // TODO this is manually placed - need to fix generator
+        ConversionsUtils::ResetSequence(image_msg.data);
         sensor_msgs__msg__Image__fini(&image_msg);
     }
 
