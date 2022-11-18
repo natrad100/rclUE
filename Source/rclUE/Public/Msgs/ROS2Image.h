@@ -47,7 +47,7 @@ public:
     // rclc type: uint32_t step
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<int> data;
+    TArray<FColor> data;  // TODO fix this in generator
     // rclc type: rosidl_runtime_c__uint8__Sequence data
 
     void SetFromROS2(const ros_msg_c_typename& in_ros_data)
@@ -58,7 +58,7 @@ public:
         encoding = ROS2MsgToUE::From(in_ros_data.encoding);
         is_bigendian = in_ros_data.is_bigendian;
         step = in_ros_data.step;
-        data = ROS2MsgToUE::FromSequence<int>(in_ros_data.data);
+        // data = ROS2MsgToUE::FromSequence<FColor>(in_ros_data.data); TODO - this isn't that trivial
     }
 
     void SetROS2(ros_msg_c_typename& out_ros_data) const
@@ -69,7 +69,10 @@ public:
         UEToROS2Msg::Set(encoding, out_ros_data.encoding);
         out_ros_data.is_bigendian = is_bigendian;
         out_ros_data.step = step;
-        UEToROS2Msg::SetSequence(data, out_ros_data.data);
+        // UEToROS2Msg::SetSequence(data, out_ros_data.data);
+
+      // TODO this is manually placed - need to fix generator
+      UEToROS2Msg::SetSequencePointer(data, out_ros_data.data);
     }
 };
 

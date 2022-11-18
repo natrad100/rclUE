@@ -171,11 +171,13 @@ namespace ROS2MsgToUE
 		
 		for (int i = 0; i < in.size; i++)
 		{
+		  // TODO - case where uint8[] converts to TArray<FColor>
 			Out.Add(From(in.data[i]));
 		}
 		
 		return Out;
 	}
+
 }
 
 namespace UEToROS2Msg
@@ -340,6 +342,21 @@ namespace UEToROS2Msg
 		{
 			out[i] = in[i];
 		}
+	}
+
+        template <typename T, typename TAlloc>
+        inline void SetSequencePointer(const TArray<T, TAlloc>& in, rosidl_runtime_c__uint8__Sequence &out)
+	{
+	  // this prevents unnecessary memory copies of buffers
+	  
+	  // if (out.data != nullptr)
+	  // {
+	  //   FMemory::Free(out.data);
+	  //   out.data = nullptr;
+	  // }
+	  out.data = (uint8_t*) in.GetData();
+	  out.size = in.Num() * sizeof(T);
+	  out.capacity = in.Num() * sizeof(T);
 	}
 
 	inline void Set(const FPoly& in, geometry_msgs__msg__Polygon& out)
