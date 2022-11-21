@@ -82,7 +82,7 @@ protected:
     UFUNCTION(BlueprintNativeEvent)
     void UpdateMessage(UROS2GenericMsg* InMessage);
 
-    void UpdateMessage_Implementation(UROS2GenericMsg* InMessage)
+    void virtual UpdateMessage_Implementation(UROS2GenericMsg* InMessage)
     {
         checkNoEntry();
     }
