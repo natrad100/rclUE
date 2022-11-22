@@ -27,7 +27,7 @@ public:
     // rclc type: geometry_msgs__msg__Pose pose
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> covariance = ArrayInitialisers::FloatArray(36);
+    TArray<double> covariance = ArrayInitialisers::FloatArray<double>(36);
     // rclc type: double covariance[36]
 
     void SetFromROS2(const ros_msg_c_typename& in_ros_data)

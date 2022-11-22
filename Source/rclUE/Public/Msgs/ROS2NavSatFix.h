@@ -53,7 +53,7 @@ public:
     // rclc type: double altitude
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> position_covariance = ArrayInitialisers::FloatArray(9);
+    TArray<double> position_covariance = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double position_covariance[9]
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)

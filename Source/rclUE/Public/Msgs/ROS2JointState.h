@@ -31,24 +31,24 @@ public:
     // rclc type: rosidl_runtime_c__String__Sequence name
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> position;
+    TArray<double> position;
     // rclc type: rosidl_runtime_c__double__Sequence position
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> velocity;
+    TArray<double> velocity;
     // rclc type: rosidl_runtime_c__double__Sequence velocity
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> effort;
+    TArray<double> effort;
     // rclc type: rosidl_runtime_c__double__Sequence effort
 
     void SetFromROS2(const ros_msg_c_typename& in_ros_data)
     {
         header.SetFromROS2(in_ros_data.header);
         name = ROS2MsgToUE::FromSequence<FString>(in_ros_data.name);
-        position = ROS2MsgToUE::FromSequence<float>(in_ros_data.position);
-        velocity = ROS2MsgToUE::FromSequence<float>(in_ros_data.velocity);
-        effort = ROS2MsgToUE::FromSequence<float>(in_ros_data.effort);
+        position = ROS2MsgToUE::FromSequence<double>(in_ros_data.position);
+        velocity = ROS2MsgToUE::FromSequence<double>(in_ros_data.velocity);
+        effort = ROS2MsgToUE::FromSequence<double>(in_ros_data.effort);
     }
 
     void SetROS2(ros_msg_c_typename& out_ros_data) const

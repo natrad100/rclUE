@@ -32,7 +32,7 @@ public:
     // rclc type: geometry_msgs__msg__Vector3 magnetic_field
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> magnetic_field_covariance = ArrayInitialisers::FloatArray(9);
+    TArray<double> magnetic_field_covariance = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double magnetic_field_covariance[9]
 
     void SetFromROS2(const ros_msg_c_typename& in_ros_data)

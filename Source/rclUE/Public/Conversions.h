@@ -28,9 +28,11 @@ inline void ResetSequence(ROSSequenceT & out)
 
 namespace ArrayInitialisers
 {
-inline TArray<float> FloatArray(ssize_t elems)
+
+  template <typename T>
+inline TArray<T> FloatArray(ssize_t elems)
 {
-  TArray<float> a;
+  TArray<T> a;
   a.Init(0.0, elems);
   return a;
 }
@@ -46,30 +48,31 @@ inline TArray<T> IntArray(ssize_t elems)
 
 namespace ROS2MsgToUE
 {
-inline float From(const float & in)
+
+  inline double From(const float & in)
 {
   return in;
 }
 
-inline float From(const double & in)
-{
-  return static_cast<float>(in);
-}
-
+  inline double From(const double & in)
+  {
+    return in;
+  }
+  
 // forgive me father for I have sinned
 inline int From(const int64_t & in)
 {
   return static_cast<int>(in);
 }
 
-inline int From(const int32_t & in)
+inline int32 From(const int32_t & in)
 {
-  return static_cast<int>(in);
+  return in;
 }
 
-inline int From(const int16_t & in)
+inline int32 From(const int16_t & in)
 {
-  return static_cast<int>(in);
+  return static_cast<int32>(in);
 }
 
 inline int From(const int8_t & in)
@@ -77,24 +80,24 @@ inline int From(const int8_t & in)
   return static_cast<int>(in);
 }
 
-inline int From(const uint64_t & in)
+inline int64 From(const uint64_t & in)
 {
-  return static_cast<int>(in);
+  return static_cast<int64>(in);
 }
 
-inline int From(const uint32_t & in)
+inline int64 From(const uint32_t & in)
 {
-  return static_cast<int>(in);
+  return static_cast<int64>(in);
 }
 
-inline int From(const uint16_t & in)
+inline int32 From(const uint16_t & in)
 {
-  return static_cast<int>(in);
+  return static_cast<int32>(in);
 }
 
-inline int From(const uint8_t & in)
+inline uint8 From(const uint8_t & in)
 {
-  return static_cast<int>(in);
+  return in;
 }
 
 inline FGeographicCoordinates From(const geographic_msgs__msg__GeoPoint & in)
@@ -112,9 +115,9 @@ inline FVector From(const geometry_msgs__msg__Point & in)
   return FVector(in.x, in.y, in.z);
 }
 
-inline FVector From(const geometry_msgs__msg__Point32 & in)
+inline UE::Math::TVector<double> From(const geometry_msgs__msg__Point32 & in)
 {
-  return FVector(in.x, in.y, in.z);
+  return UE::Math::TVector(static_cast<double>(in.x), static_cast<double>(in.y), static_cast<double>(in.z));
 }
 
 inline FString From(const rosidl_runtime_c__String & in)
@@ -150,9 +153,9 @@ inline TArray<int> FromArray(const T (&in)[N])
 }
 
 template <size_t N>
-inline TArray<float> FromArray(const double (&in)[N])
+inline TArray<double> FromArray(const double (&in)[N])
 {
-  TArray<float> out;
+  TArray<double> out;
   for (int i = 0; i < N; i++)
   {
     out.Add(in[i]);
