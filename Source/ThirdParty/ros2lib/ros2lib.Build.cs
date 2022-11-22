@@ -2,9 +2,9 @@
 
 using System;
 using System.IO;
-using Tools.DotNETCommon;
 using UnrealBuildTool;
 using System.Collections.Generic;
+using EpicGames.Core;
 
 public class ros2lib : ModuleRules
 {

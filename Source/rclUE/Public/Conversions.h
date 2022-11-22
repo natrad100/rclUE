@@ -199,21 +199,24 @@ inline void Set(const FGeographicCoordinates & in, geographic_msgs__msg__GeoPoin
   out.altitude = in.Altitude;
 }
 
-inline void Set(const FVector & in, geometry_msgs__msg__Vector3 & out)
+  template <typename T>
+inline void Set(const UE::Math::TVector<T> & in, geometry_msgs__msg__Vector3 & out)
 {
   out.x = in.X;
   out.y = in.Y;
   out.z = in.Z;
 }
 
-inline void Set(const FVector & in, geometry_msgs__msg__Point & out)
+  template <typename T>
+inline void Set(const UE::Math::TVector<T> & in, geometry_msgs__msg__Point & out)
 {
   out.x = in.X;
   out.y = in.Y;
   out.z = in.Z;
 }
 
-inline void Set(const FVector & in, geometry_msgs__msg__Point32 & out)
+  template <typename T>
+inline void Set(const UE::Math::TVector<T> & in, geometry_msgs__msg__Point32 & out)
 {
   out.x = in.X;
   out.y = in.Y;
@@ -239,6 +242,15 @@ inline void Set(const float & in, double & out)
   out = in;
 }
 
+  inline void Set(const double & in, double & out)
+{
+  out = in;
+}
+  inline void Set(const double & in, float & out)
+{
+  out = in;
+}
+  
 inline void Set(const int & in, int64_t & out)
 {
   out = in;
