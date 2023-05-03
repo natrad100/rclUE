@@ -33,7 +33,7 @@ public:
     // rclc type: geometry_msgs__msg__Quaternion orientation
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> orientation_covariance = ArrayInitialisers::FloatArray(9);
+    TArray<double> orientation_covariance = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double orientation_covariance[9]
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -41,7 +41,7 @@ public:
     // rclc type: geometry_msgs__msg__Vector3 angular_velocity
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> angular_velocity_covariance = ArrayInitialisers::FloatArray(9);
+    TArray<double> angular_velocity_covariance = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double angular_velocity_covariance[9]
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -49,7 +49,7 @@ public:
     // rclc type: geometry_msgs__msg__Vector3 linear_acceleration
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> linear_acceleration_covariance = ArrayInitialisers::FloatArray(9);
+    TArray<double> linear_acceleration_covariance = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double linear_acceleration_covariance[9]
 
     void SetFromROS2(const ros_msg_c_typename& in_ros_data)

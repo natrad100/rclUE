@@ -40,19 +40,19 @@ public:
     // rclc type: rosidl_runtime_c__String distortion_model
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> d;
+    TArray<double> d;
     // rclc type: rosidl_runtime_c__double__Sequence d
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> k = ArrayInitialisers::FloatArray(9);
+    TArray<double> k = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double k[9]
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> r = ArrayInitialisers::FloatArray(9);
+    TArray<double> r = ArrayInitialisers::FloatArray<double>(9);
     // rclc type: double r[9]
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<float> p = ArrayInitialisers::FloatArray(12);
+    TArray<double> p = ArrayInitialisers::FloatArray<double>(12);
     // rclc type: double p[12]
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -73,7 +73,7 @@ public:
         height = in_ros_data.height;
         width = in_ros_data.width;
         distortion_model = ROS2MsgToUE::From(in_ros_data.distortion_model);
-        d = ROS2MsgToUE::FromSequence<float>(in_ros_data.d);
+        d = ROS2MsgToUE::FromSequence<double>(in_ros_data.d);
         k = ROS2MsgToUE::FromArray(in_ros_data.k);
         r = ROS2MsgToUE::FromArray(in_ros_data.r);
         p = ROS2MsgToUE::FromArray(in_ros_data.p);
