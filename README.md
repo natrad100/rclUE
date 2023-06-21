@@ -10,10 +10,9 @@
 
 # Basic information
 ## Supported versions
-- Ubuntu
-- Unreal Engine 4.27 (This repo aims to track latest release version of the engine)
-- ROS2 Rolling with patched `rcutils` (https://github.com/Greenroom-Robotics/rclue-rcutils)
- - Galactic can be used with this backported patch: https://github.com/ros2/rosidl/pull/603
+- Ubuntu Jammy
+- Unreal Engine 5.2 (This repo aims to track latest release version of the engine)
+- ROS2 Humble with patched `rcutils` (https://github.com/Greenroom-Robotics/rclue-rcutils)
 
 Windows is currently unsupported.
 
@@ -32,7 +31,7 @@ Follow Epic documentation on checking out and compiling Unreal Engine source cod
 - `rcutils` (with rclUE patch)
 
 ## Add this plugin to an Unreal Engine project
-1. Clone this repository in your project `Plugins` folder
+1. Clone this repository in your project's `Plugins` folder
 2. Create a shell script in the root Project folder to launch the Unreal Engine editor (substituting `UNREAL_HOME`, `PROJECTS_HOME`, `ROS2_ENV` and `PROJECT_NAME` for the appropriate paths):
 
 ```bash
@@ -41,8 +40,8 @@ Follow Epic documentation on checking out and compiling Unreal Engine source cod
 UNREAL_HOME="/home/${USER}/UnrealEngine"
 PROJECTS_HOME="/home/${USER}/Documents/Unreal Projects"
 PROJECT_NAME="MyProject"
-ROS2_ENV="/opt/ros/foxy"
-EDITOR_COMMAND="${UNREAL_HOME}/Engine/Binaries/Linux/UE4Editor"
+ROS2_ENV="/opt/ros/humble"
+EDITOR_COMMAND="${UNREAL_HOME}/Engine/Binaries/Linux/UnrealEditor"
 
 source ${ROS2_ENV}/setup.bash
 (exec "$EDITOR_COMMAND" "${PROJECTS_HOME}/${PROJECT_NAME}/${PROJECT_NAME}.uproject")
