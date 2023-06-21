@@ -78,6 +78,13 @@ public:
     UPROPERTY(BlueprintReadOnly)
     UROS2State State = UROS2State::Created;
 
+    // TODO refactor this class into two, split out ROS stuff from actorcomponent
+    UPROPERTY(BlueprintReadOnly)
+    UROS2GenericMsg* TopicMessage;
+
+    UFUNCTION(BlueprintCallable)
+    void PublishMsg(UROS2GenericMsg* Message, bool async=false);
+
 protected:
     UFUNCTION(BlueprintNativeEvent)
     void UpdateMessage(UROS2GenericMsg* InMessage);
@@ -90,11 +97,7 @@ protected:
     UFUNCTION(BlueprintCallable)
     void Publish();
 
-    UFUNCTION(BlueprintCallable)
-    void PublishMsg(UROS2GenericMsg* Message, bool async=false);
 
-    UPROPERTY(BlueprintReadOnly)
-    UROS2GenericMsg* TopicMessage;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     FTimerHandle TimerHandle;
