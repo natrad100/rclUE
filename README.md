@@ -12,7 +12,7 @@
 ## Supported versions
 - Ubuntu Jammy
 - Unreal Engine 5.2 (This repo aims to track latest release version of the engine)
-- ROS2 Humble with patched `rcutils` (https://github.com/Greenroom-Robotics/rclue-rcutils)
+- ROS2 Iron with patched `rcutils` (https://github.com/Greenroom-Robotics/rclue-rcutils)
 
 Windows is currently unsupported.
 
@@ -40,15 +40,15 @@ Follow Epic documentation on checking out and compiling Unreal Engine source cod
 UNREAL_HOME="/home/${USER}/UnrealEngine"
 PROJECTS_HOME="/home/${USER}/Documents/Unreal Projects"
 PROJECT_NAME="MyProject"
-ROS2_ENV="/opt/ros/humble"
+ROS2_ENV="/opt/ros/iron"
 EDITOR_COMMAND="${UNREAL_HOME}/Engine/Binaries/Linux/UnrealEditor"
 
 source ${ROS2_ENV}/setup.bash
 (exec "$EDITOR_COMMAND" "${PROJECTS_HOME}/${PROJECT_NAME}/${PROJECT_NAME}.uproject")
 ```
 
-3. within the Unreal Editor: Edit->Plugins, enable for `rclUE`
-4. change the world settings to use meters as units instead of the default centimeters
+3. Within the Unreal Editor: Edit->Plugins, enable for `rclUE`
+4. Change the world settings to use meters as units instead of the default centimeters
 
 
 # Getting Started
