@@ -112,7 +112,7 @@ public class ros2lib : ModuleRules
                                      "builtin_interfaces", "std_msgs", "rosgraph_msgs", "example_interfaces",
                                      "geometry_msgs", "geographic_msgs", "sensor_msgs", "nav_msgs", "tf2_msgs", "unique_identifier_msgs", "action_msgs", "service_msgs",
                                      "rosidl_dynamic_typesupport", "rosidl_generator_c", "rosidl_typesupport_c", "rosidl_typesupport_interface", "rosidl_typesupport_introspection_c", "rosidl_runtime_c",
-                                     "rcl", "rcl_action", "rcl_lifecycle", "rcl_yaml_param_parser", "rcl_interfaces",
+                                     "rcl", "rcl_action", "rcl_lifecycle", "rcl_yaml_param_parser", "rcl_interfaces", "type_description_interfaces",
                                      "rclc", "rclc_lifecycle" };
 
         if (Target.Platform == UnrealTargetPlatform.Linux)
