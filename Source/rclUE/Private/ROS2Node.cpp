@@ -315,7 +315,7 @@ void AROS2Node::HandleSubscribers()
             }
 
             if (rc_take == RCL_RET_OK) {
-                s->IncomingMessage(s->TopicMessage);
+                s->HandleMessage(s->TopicMessage);
             } else if (rc_take == RCL_RET_SUBSCRIPTION_TAKE_FAILED) {
                 UE_LOG(LogROS2Node, Warning, TEXT("[%s] Subscription take failed (%s)"), *GetName(), *__LOG_INFO__);
             } else {

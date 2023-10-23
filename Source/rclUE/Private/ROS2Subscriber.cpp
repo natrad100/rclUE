@@ -12,6 +12,34 @@ UROS2Subscriber::UROS2Subscriber()
     PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UROS2Subscriber::BeginPlay()
+{
+    Super::BeginPlay();    
+    
+    if (bAutoInitialise)
+    {
+        if (!IsValid(ROSNode))
+        {
+            AROS2Node* FirstROSNode = Cast<AROS2Node>(UGameplayStatics::GetActorOfClass(GetWorld(), AROS2Node::StaticClass()));
+            if (IsValid(FirstROSNode))
+            {
+                ROSNode = FirstROSNode;
+            } else
+            {
+                UE_LOG(LogROS2Subscriber, Error, TEXT("[%s] Cannot locate a ROSNode Actor to AddPublisher on. Initialisation failed."), *GetName());
+                return;
+            }
+        }
+        if (ROSNode->State != UROS2State::Initialized)
+        {
+            ROSNode->OnNodeInitialised.AddDynamic(this, &UROS2Subscriber::WhenNodeInits);
+        } else
+        {
+            WhenNodeInits();
+        }
+    }
+}
+
 void UROS2Subscriber::Init()
 {
     TRACE_CPUPROFILER_EVENT_SCOPE_STR("UROS2Subscriber::Init")
@@ -57,7 +85,7 @@ void UROS2Subscriber::Init()
         sub_opt.allocator = ROSNode->ROSSubsystem()->GetRclUEAllocator();
         
         if (bQosOverride) {
-            sub_opt.qos = BuildQoSProfile(QosHistoryPolicy, QosDepth, QosReliabilityPolicy, QosDurabilityPolicy);
+            sub_opt.qos = Qos.ToRMW();
         } else {
             sub_opt.qos = QoSProfiles_LUT[QosProfilePreset];
         }
@@ -87,7 +115,22 @@ void UROS2Subscriber::Destroy()
     UE_LOG(LogROS2Subscriber, Display, TEXT("[%s] subscriber destroyed"), *GetName());
 }
 
+void UROS2Subscriber::HandleMessage(UROS2GenericMsg* Message)
+{
+    if (IncomingMessageDelegate.IsBound()) {
+        IncomingMessageDelegate.Execute(Message);
+    } else {
+        IncomingMessage(Message);
+    }
+}
+
 void UROS2Subscriber::IncomingMessage_Implementation(UROS2GenericMsg* Message)
 {
     UE_LOG(LogROS2Subscriber, Error, TEXT("[%s] Incoming Message has not been overriden."), *GetName());
+}
+
+void UROS2Subscriber::WhenNodeInits()
+{
+    UE_LOG(LogROS2Subscriber, Verbose, TEXT("[%s] Node is ready!."), *GetName());
+    ROSNode->AddSubscriber(this);
 }

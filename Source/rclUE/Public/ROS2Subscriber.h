@@ -6,6 +6,8 @@
 
 #include "ROS2Subscriber.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FIncomingMessageDelegate, UROS2GenericMsg*, IncomingMessage);
+
 UCLASS(ClassGroup = (Custom), Blueprintable, meta = (BlueprintSpawnableComponent))
 class RCLUE_API UROS2Subscriber : public UActorComponent
 {
@@ -21,18 +23,12 @@ public:
     bool bQosOverride = false;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    UROS2QosHistoryPolicy QosHistoryPolicy = UROS2QosHistoryPolicy::KEEP_LAST;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    int32 QosDepth = 10;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    UROS2QosReliabilityPolicy QosReliabilityPolicy = UROS2QosReliabilityPolicy::RELIABLE;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    UROS2QosDurabilityPolicy QosDurabilityPolicy = UROS2QosDurabilityPolicy::VOLATILE;
+    FROS2QualityOfService Qos;
 
     void Init();
+    void WhenNodeInits();
+    void BeginPlay() override;
+    void HandleMessage(UROS2GenericMsg* Message);
 
     UFUNCTION()
     virtual void Destroy();
@@ -48,6 +44,12 @@ public:
 
     UPROPERTY(BlueprintReadOnly)
     UROS2State State = UROS2State::Created;
+
+    UPROPERTY(BlueprintReadWrite)
+    FIncomingMessageDelegate IncomingMessageDelegate;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool bAutoInitialise = false;
 
     UFUNCTION(BlueprintNativeEvent)
     void IncomingMessage(UROS2GenericMsg* Message);

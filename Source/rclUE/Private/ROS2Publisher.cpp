@@ -16,6 +16,33 @@ UROS2Publisher::UROS2Publisher(const FObjectInitializer& ObjectInitializer)
     PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UROS2Publisher::BeginPlay()
+{
+    Super::BeginPlay();
+    if (bAutoInitialise)
+    {
+        if (!IsValid(ROSNode))
+        {
+            AROS2Node* FirstROSNode = Cast<AROS2Node>(UGameplayStatics::GetActorOfClass(GetWorld(), AROS2Node::StaticClass()));
+            if (IsValid(FirstROSNode))
+            {
+                ROSNode = FirstROSNode;
+            } else
+            {
+                UE_LOG(LogROS2Publisher, Error, TEXT("[%s] Cannot locate a ROSNode Actor to AddPublisher on. Initialisation failed."), *GetName());
+                return;
+            }
+        }
+        if (ROSNode->State != UROS2State::Initialized)
+        {
+            ROSNode->OnNodeInitialised.AddDynamic(this, &UROS2Publisher::WhenNodeInits);
+        } else
+        {
+            WhenNodeInits();
+        }
+    }
+}
+
 void UROS2Publisher::Init()
 {
     TRACE_CPUPROFILER_EVENT_SCOPE_STR("UROS2Publisher::Init")
@@ -53,7 +80,7 @@ void UROS2Publisher::Init()
         pub_opt.allocator = ROSNode->ROSSubsystem()->GetRclUEAllocator();
         
         if (bQosOverride) {
-            pub_opt.qos = BuildQoSProfile(QosHistoryPolicy, QosDepth, QosReliabilityPolicy, QosDurabilityPolicy);
+            pub_opt.qos = Qos.ToRMW();
         } else {
             pub_opt.qos = QoSProfiles_LUT[QosProfilePreset];
         }
@@ -152,4 +179,10 @@ void UROS2Publisher::PublishMsg(UROS2GenericMsg* Message, bool async)
         FScopeLock Lock(&Mutex);
         RCSOFTCHECK(rcl_publish(&RclPublisher, Message->Get(), nullptr));
     }
+}
+
+void UROS2Publisher::WhenNodeInits()
+{
+    UE_LOG(LogROS2Publisher, Verbose, TEXT("[%s] Node is ready!."), *GetName());
+    ROSNode->AddPublisher(this);
 }

@@ -15,7 +15,7 @@
 #include <rcl_action/wait.h>
 #include <rclc/rclc.h>
 
-
+#include "rclcUtilities.generated.h"
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
@@ -75,6 +75,26 @@ enum class UROS2State : uint8
 {
     Created UMETA(DisplayName = "Created"),
     Initialized UMETA(DisplayName = "Initialized"),
+};
+
+USTRUCT(Blueprintable)
+struct FRMWTime
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int Seconds = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int Nanoseconds = 0;
+
+    rmw_time_t ToRMW() {
+        return {
+            static_cast<uint64>(Seconds), static_cast<uint64>(Nanoseconds)
+        };
+    }
+
 };
 
 // used to set QoS policies (https://docs.ros.org/en/foxy/Concepts/About-Quality-of-Service-Settings.html)
@@ -191,8 +211,6 @@ static const TMap<UROS2QosReliabilityPolicy, rmw_qos_reliability_policy_t> UROS2
     {UROS2QosReliabilityPolicy::BEST_EFFORT, RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT},
     {UROS2QosReliabilityPolicy::UNKNOWN, RMW_QOS_POLICY_RELIABILITY_UNKNOWN}
 };
-
-
   
 UENUM(BlueprintType)
 enum class UROS2QosDurabilityPolicy : uint8
@@ -209,3 +227,51 @@ static const TMap<UROS2QosDurabilityPolicy, rmw_qos_durability_policy_t> UROS2Qo
     {UROS2QosDurabilityPolicy::VOLATILE, RMW_QOS_POLICY_DURABILITY_VOLATILE},
     {UROS2QosDurabilityPolicy::UNKNOWN, RMW_QOS_POLICY_DURABILITY_UNKNOWN}
 };
+
+USTRUCT(Blueprintable)
+struct RCLUE_API FROS2QualityOfService
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UROS2QosHistoryPolicy QosHistoryPolicy = UROS2QosHistoryPolicy::KEEP_LAST;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 QosDepth = 10;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FRMWTime QosDeadline = RMW_QOS_DEADLINE_DEFAULT;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FRMWTime QosLifespan = RMW_QOS_LIFESPAN_DEFAULT;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UROS2QosReliabilityPolicy QosReliabilityPolicy = UROS2QosReliabilityPolicy::RELIABLE;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UROS2QosDurabilityPolicy QosDurabilityPolicy = UROS2QosDurabilityPolicy::VOLATILE;
+
+    rmw_qos_profile_t ToRMW() {
+        return {
+            UROS2QosHistoryPolicy_LUT[QosHistoryPolicy],
+            (uint32) QosDepth,
+            UROS2QosReliabilityPolicy_LUT[QosReliabilityPolicy],
+            UROS2QosDurabilityPolicy_LUT[QosDurabilityPolicy],
+            QosDeadline.ToRMW(),
+            QosLifespan.ToRMW(),
+            RMW_QOS_POLICY_LIVELINESS_SYSTEM_DEFAULT,
+            RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
+            false
+        };
+    }
+};
+
+/*   
+    enum rmw_qos_liveliness_policy_t 	liveliness
+        Liveliness QoS policy setting. More...
+    
+    struct rmw_time_t 	liveliness_lease_duration
+        The time within which the RMW node or publisher must show that it is alive. More...
+
+*/

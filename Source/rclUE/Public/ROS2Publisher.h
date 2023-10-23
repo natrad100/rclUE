@@ -23,34 +23,12 @@ public:
     bool bQosOverride = false;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    UROS2QosHistoryPolicy QosHistoryPolicy = UROS2QosHistoryPolicy::KEEP_LAST;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    int32 QosDepth = 10;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    UROS2QosReliabilityPolicy QosReliabilityPolicy = UROS2QosReliabilityPolicy::RELIABLE;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="bQosOverride"))
-    UROS2QosDurabilityPolicy QosDurabilityPolicy = UROS2QosDurabilityPolicy::VOLATILE;
-
-/*
-    struct rmw_time_t 	deadline
-        The period at which messages are expected to be sent/received. More...
-    
-    struct rmw_time_t 	lifespan
-        The age at which messages are considered expired and no longer valid. More...
-    
-    enum rmw_qos_liveliness_policy_t 	liveliness
-        Liveliness QoS policy setting. More...
-    
-    struct rmw_time_t 	liveliness_lease_duration
-        The time within which the RMW node or publisher must show that it is alive. More...
-
-*/
+    FROS2QualityOfService Qos;
 
     void Init();
-    
+    void WhenNodeInits();
+    void BeginPlay() override;
+
     UFUNCTION(BlueprintCallable)
     void UpdateAndPublishMessage();
 
@@ -78,6 +56,9 @@ public:
     UPROPERTY(BlueprintReadOnly)
     UROS2State State = UROS2State::Created;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool bAutoInitialise = false;
+
     // TODO refactor this class into two, split out ROS stuff from actorcomponent
     UPROPERTY(BlueprintReadOnly)
     UROS2GenericMsg* TopicMessage;
@@ -96,8 +77,6 @@ protected:
 
     UFUNCTION(BlueprintCallable)
     void Publish();
-
-
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     FTimerHandle TimerHandle;
