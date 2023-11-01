@@ -7,7 +7,8 @@
 
 DEFINE_LOG_CATEGORY(LogROS2Subscriber);
 
-UROS2Subscriber::UROS2Subscriber()
+UROS2Subscriber::UROS2Subscriber(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer)
 {
     PrimaryComponentTick.bCanEverTick = true;
 }

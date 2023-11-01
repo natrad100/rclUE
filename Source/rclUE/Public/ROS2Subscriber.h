@@ -14,7 +14,7 @@ class RCLUE_API UROS2Subscriber : public UActorComponent
     GENERATED_BODY()
 
 public:
-    UROS2Subscriber();
+    UROS2Subscriber(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());  
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (EditCondition="!bQosOverride"))
     UROS2QoS QosProfilePreset = UROS2QoS::Default;
