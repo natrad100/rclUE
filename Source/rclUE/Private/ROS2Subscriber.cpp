@@ -127,7 +127,7 @@ void UROS2Subscriber::HandleMessage(UROS2GenericMsg* Message)
 
 void UROS2Subscriber::IncomingMessage_Implementation(UROS2GenericMsg* Message)
 {
-    UE_LOG(LogROS2Subscriber, Error, TEXT("[%s] Incoming Message has not been overriden."), *GetName());
+    UE_LOG(LogROS2Subscriber, Error, TEXT("[%s] IncomingMessage has not been overriden."), *GetName());
 }
 
 void UROS2Subscriber::WhenNodeInits()

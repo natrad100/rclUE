@@ -66,15 +66,6 @@ public:
     UFUNCTION(BlueprintCallable)
     void PublishMsg(UROS2GenericMsg* Message, bool async=false);
 
-protected:
-    UFUNCTION(BlueprintNativeEvent)
-    void UpdateMessage(UROS2GenericMsg* InMessage);
-
-    void virtual UpdateMessage_Implementation(UROS2GenericMsg* InMessage)
-    {
-        checkNoEntry();
-    }
-
     UFUNCTION(BlueprintCallable)
     void Publish();
 
@@ -86,6 +77,15 @@ protected:
     const void* PublishedMsg = nullptr;
 
     rcl_publisher_t RclPublisher;
+
+protected:
+    UFUNCTION(BlueprintNativeEvent)
+    void UpdateMessage(UROS2GenericMsg* InMessage);
+
+    void virtual UpdateMessage_Implementation(UROS2GenericMsg* InMessage)
+    {
+        checkNoEntry();
+    }
 
 private:
     TFuture<void> AsyncPublisherFuture;

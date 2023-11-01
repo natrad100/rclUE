@@ -45,15 +45,8 @@ public:
     UPROPERTY(BlueprintReadOnly)
     UROS2State State = UROS2State::Created;
 
-    UPROPERTY(BlueprintReadWrite)
-    FIncomingMessageDelegate IncomingMessageDelegate;
-
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     bool bAutoInitialise = false;
-
-    UFUNCTION(BlueprintNativeEvent)
-    void IncomingMessage(UROS2GenericMsg* Message);
-    void IncomingMessage_Implementation(UROS2GenericMsg* Message);
 
     bool Ready;
 
@@ -61,4 +54,13 @@ public:
     UROS2GenericMsg* TopicMessage;
 
     rcl_subscription_t rcl_subscription;
+
+    UPROPERTY(BlueprintReadWrite)
+    FIncomingMessageDelegate IncomingMessageDelegate;
+
+    UFUNCTION(BlueprintNativeEvent)
+    void IncomingMessage(UROS2GenericMsg* Message);
+
+protected:
+    virtual void IncomingMessage_Implementation(UROS2GenericMsg* Message);
 };
