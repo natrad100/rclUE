@@ -83,6 +83,12 @@ public:
     void AddPublisher(UROS2Publisher* InPublisher);
 
     UFUNCTION(BlueprintCallable)
+    void RemoveSubscriber(UROS2Subscriber* Subscriber);
+
+    UFUNCTION(BlueprintCallable)
+    void RemovePublisher(UROS2Publisher* Publisher);
+
+    UFUNCTION(BlueprintCallable)
     void AddServiceClient(UROS2ServiceClient* InClient);
 
     UFUNCTION(BlueprintCallable)

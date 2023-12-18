@@ -41,6 +41,13 @@ void UROS2Subscriber::BeginPlay()
     }
 }
 
+void UROS2Subscriber::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Destroy();
+    Node->Subscribers.Remove(this);
+    Super::EndPlay(EndPlayReason);
+}
+
 void UROS2Subscriber::Init()
 {
     TRACE_CPUPROFILER_EVENT_SCOPE_STR("UROS2Subscriber::Init")

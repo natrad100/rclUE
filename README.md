@@ -11,7 +11,7 @@
 # Basic information
 ## Supported versions
 - Ubuntu Jammy
-- Unreal Engine 5.2 (This repo aims to track latest release version of the engine)
+- Unreal Engine 5.3 (This repo aims to track latest release version of the engine)
 - ROS2 Iron with patched `rcutils` (https://github.com/Greenroom-Robotics/rclue-rcutils)
 
 Windows is currently unsupported.

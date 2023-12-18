@@ -38,9 +38,10 @@ void AROS2Node::BringDown()
 
     for (auto& s : Subscribers)
     {
-        if (IsValid(s))
-            s->Destroy();
+        RemoveSubscriber(s);
     }
+
+    Subscribers.Empty();
 
     for (auto& s : Services)
     {
@@ -49,9 +50,10 @@ void AROS2Node::BringDown()
 
     for (auto& p : Publishers)
     {
-        if (IsValid(p))
-            p->Destroy();
+        RemovePublisher(p);
     }
+
+    Publishers.Empty();
 
     TArray<UActorComponent*> PubComponents;
     GetComponents(UROS2Publisher::StaticClass(), PubComponents, true);
@@ -162,6 +164,14 @@ void AROS2Node::AddSubscriber(UROS2Subscriber* Subscriber)
     }
 }
 
+void AROS2Node::RemoveSubscriber(UROS2Subscriber* Subscriber)
+{
+    if (!IsValid(Subscriber))
+        return;
+
+    Subscriber->Destroy();
+}
+
 void AROS2Node::AddServiceServer(const FString& ServiceName,
                                  const TSubclassOf<UROS2GenericSrv> SrvClass,
                                  const FServiceCallback& Callback)
@@ -223,6 +233,14 @@ void AROS2Node::AddPublisher(UROS2Publisher* InPublisher)
     {
         UE_LOG(LogROS2Node, Error, TEXT("[%s] Attempt to re-add publisher '%s' (%s)"), *GetName(), *InPublisher->GetName(), *__LOG_INFO__);
     }
+}
+
+void AROS2Node::RemovePublisher(UROS2Publisher* Publisher)
+{
+    if (!IsValid(Publisher))
+        return;
+
+    Publisher->Destroy();
 }
 
 void AROS2Node::AddServiceClient(UROS2ServiceClient* InClient)
