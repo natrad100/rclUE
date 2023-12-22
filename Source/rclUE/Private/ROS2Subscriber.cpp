@@ -44,7 +44,9 @@ void UROS2Subscriber::BeginPlay()
 void UROS2Subscriber::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     Destroy();
-    Node->Subscribers.Remove(this);
+    if (IsValid(ROSNode)){
+        ROSNode->Subscribers.Remove(this);
+    }
     Super::EndPlay(EndPlayReason);
 }
 

@@ -28,6 +28,7 @@ public:
     void Init();
     void WhenNodeInits();
     void BeginPlay() override;
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
     void HandleMessage(UROS2GenericMsg* Message);
 
     UFUNCTION()

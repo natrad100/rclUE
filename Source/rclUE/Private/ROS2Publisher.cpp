@@ -46,7 +46,10 @@ void UROS2Publisher::BeginPlay()
 void UROS2Publisher::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     Destroy();
-    Node->Publishers.Remove(this);
+    if (IsValid(ROSNode))
+    {
+        ROSNode->Publishers.Remove(this);
+    }
     Super::EndPlay(EndPlayReason);
 }
 
