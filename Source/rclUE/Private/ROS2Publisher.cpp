@@ -43,6 +43,16 @@ void UROS2Publisher::BeginPlay()
     }
 }
 
+void UROS2Publisher::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Destroy();
+    if (IsValid(ROSNode))
+    {
+        ROSNode->Publishers.Remove(this);
+    }
+    Super::EndPlay(EndPlayReason);
+}
+
 void UROS2Publisher::Init()
 {
     TRACE_CPUPROFILER_EVENT_SCOPE_STR("UROS2Publisher::Init")

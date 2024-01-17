@@ -83,6 +83,12 @@ public:
     void AddPublisher(UROS2Publisher* InPublisher);
 
     UFUNCTION(BlueprintCallable)
+    void RemoveSubscriber(UROS2Subscriber* Subscriber);
+
+    UFUNCTION(BlueprintCallable)
+    void RemovePublisher(UROS2Publisher* Publisher);
+
+    UFUNCTION(BlueprintCallable)
     void AddServiceClient(UROS2ServiceClient* InClient);
 
     UFUNCTION(BlueprintCallable)
@@ -136,6 +142,12 @@ public:
         return &_rcl_node;
     }
 
+    UPROPERTY(BlueprintReadWrite)
+    TArray<UROS2Subscriber*> Subscribers;
+    
+    UPROPERTY(BlueprintReadWrite)
+    TArray<UROS2Publisher*> Publishers;
+
 protected:
     // method used to wait on communication and call delegates when appropriate
     // modeled after executor + actions
@@ -149,13 +161,7 @@ protected:
     UROS2Support* Support;
 
     UPROPERTY(BlueprintReadWrite)
-    TArray<UROS2Subscriber*> Subscribers;
-
-    UPROPERTY(BlueprintReadWrite)
     TArray<FService> Services;
-
-    UPROPERTY(BlueprintReadWrite)
-    TArray<UROS2Publisher*> Publishers;
 
     UPROPERTY(BlueprintReadWrite)
     TArray<UROS2ServiceClient*> Clients;
